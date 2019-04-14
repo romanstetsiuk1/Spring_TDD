@@ -1,5 +1,6 @@
 package com.romanstetsiuk.spring_tdd.security;
 
+import com.romanstetsiuk.spring_tdd.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,20 +24,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .encode("myPassword");
 
     @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("Rambo")
+//                .password(encodedpassword)
+//                .roles("ADMIN")
+//                .and()
+//                .passwordEncoder(bcrypt());
+
         auth
-                .inMemoryAuthentication()
-                .withUser("Rambo")
-                .password(encodedpassword)
-                .roles("ADMIN")
-                .and()
+                .userDetailsService(userDetailsService)
                 .passwordEncoder(bcrypt());
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/prywatna")
                 .authenticated()
