@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    String encodedpassword = bcrypt()
+    String encodedpassword = new BCryptPasswordEncoder()
             .encode("myPassword");
 
     @Autowired
@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication()
                 .withUser("Rambo")
                 .password(encodedpassword)
+                .roles("ADMIN")
                 .and()
                 .passwordEncoder(bcrypt());
     }
@@ -38,6 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/prywatna")
                 .authenticated()
                 .anyRequest()
-                .permitAll();
+                .permitAll()
+                .and()
+                .formLogin();
     }
 }
