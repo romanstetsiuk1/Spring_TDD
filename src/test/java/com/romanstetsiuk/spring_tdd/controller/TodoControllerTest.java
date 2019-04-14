@@ -14,9 +14,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,6 +49,20 @@ public class TodoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("todos"))
                 .andExpect(model().attribute("list", hasSize(2)));
+    }
+
+    @Test
+    public void findByIdValidTest() throws Exception {
+        ToDo toDo = new ToDo(101L, "Title1", "Task1");
+
+        when(todoService.findById(any())).thenReturn(Optional.ofNullable(toDo));
+
+        mockMvc.perform(get("/todoDetails/101"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("todoDetails"))
+                .andExpect(model().attributeExists("singleTodo"))
+                .andExpect(model().attribute("singleTodo", toDo));
+
     }
 
 }
