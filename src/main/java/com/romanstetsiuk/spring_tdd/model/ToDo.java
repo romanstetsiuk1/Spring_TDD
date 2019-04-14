@@ -16,7 +16,8 @@ public class ToDo {
     public ToDo() {
     }
 
-    public ToDo(String title, String description) {
+    public ToDo(Long id, String title, String description) {
+        this.id = id;
         this.title = title;
         this.description = description;
     }

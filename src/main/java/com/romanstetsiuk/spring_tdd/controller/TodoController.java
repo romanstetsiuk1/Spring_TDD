@@ -14,7 +14,7 @@ public class TodoController {
 
     @GetMapping("/todosView")
     String getTodosView(Model model) {
-        model.addAttribute("list: ", todoService.findAll());
+        model.addAttribute("list", todoService.findAll());
         return "todos";
     }
 
